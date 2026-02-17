@@ -643,7 +643,7 @@ ul, ol {
 
 .hero__panel-bar-fill {
   height: 100%;
-  width: 15.2%;
+  width: 0%;
   background: var(--color-accent);
   border-radius: 2px;
 }

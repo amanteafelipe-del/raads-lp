@@ -94,25 +94,25 @@
 
           <div class="hero__panel-hero-number">
             <div class="hero__panel-currency">R$</div>
-            <div class="hero__panel-amount">487<span class="hero__panel-cents">,20</span></div>
+            <div class="hero__panel-amount"><span id="panel-main-int">487</span><span class="hero__panel-cents">,<span id="panel-main-dec">20</span></span></div>
             <div class="hero__panel-label">protegidos este mês</div>
           </div>
 
           <div class="hero__panel-grid">
             <div class="hero__panel-stat">
-              <div class="hero__panel-stat-value">23</div>
+              <div class="hero__panel-stat-value"><span id="panel-bots">23</span></div>
               <div class="hero__panel-stat-label">bots bloqueados</div>
             </div>
             <div class="hero__panel-stat">
-              <div class="hero__panel-stat-value hero__panel-stat-value--money">R$312</div>
+              <div class="hero__panel-stat-value hero__panel-stat-value--money">R$<span id="panel-budget">312</span></div>
               <div class="hero__panel-stat-label">budget recuperado</div>
             </div>
             <div class="hero__panel-stat">
-              <div class="hero__panel-stat-value">94%</div>
+              <div class="hero__panel-stat-value"><span id="panel-conv">94</span>%</div>
               <div class="hero__panel-stat-label">conversões rastreadas</div>
             </div>
             <div class="hero__panel-stat">
-              <div class="hero__panel-stat-value">18</div>
+              <div class="hero__panel-stat-value"><span id="panel-comp">18</span></div>
               <div class="hero__panel-stat-label">concorrentes bloqueados</div>
             </div>
           </div>
@@ -124,7 +124,7 @@
             </div>
             <div class="hero__panel-bar-wrap">
               <div class="hero__panel-bar">
-                <div class="hero__panel-bar-fill"></div>
+                <div class="hero__panel-bar-fill" id="panel-bar-fill"></div>
               </div>
               <span class="hero__panel-bar-label">15,2% protegido</span>
             </div>
@@ -1479,16 +1479,136 @@
     })();
   </script>
 
-  <!-- Mês dinâmico no painel hero -->
+  <!-- Painel hero: mês dinâmico + contador no load + micro-incrementos -->
   <script>
-    (function() {
-      var meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
-                   'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-      var now = new Date();
-      var label = meses[now.getMonth()] + ' ' + now.getFullYear() + ' · Resumo do Mês';
-      var el = document.getElementById('panel-period');
-      if (el) el.textContent = label;
-    })();
+  (function() {
+    // --- Mês dinâmico ---
+    var meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+                 'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+    var now = new Date();
+    var elPeriod = document.getElementById('panel-period');
+    if (elPeriod) elPeriod.textContent = meses[now.getMonth()] + ' ' + now.getFullYear() + ' · Resumo do Mês';
+
+    // --- Estado atual dos valores ---
+    var state = {
+      mainInt: 0,   // parte inteira do R$ principal (alvo: 487)
+      mainDec: 0,   // centavos (alvo: 20)
+      bots: 0,      // alvo: 23
+      budget: 0,    // alvo: 312
+      conv: 0,      // alvo: 94 (estático após load)
+      comp: 0       // alvo: 18 (estático após load)
+    };
+
+    // --- Utilitário: easing suave ---
+    function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+    // --- Contador genérico (0 → target em duration ms) ---
+    function countUp(setter, target, duration, onDone) {
+      var start = performance.now();
+      function step(now) {
+        var elapsed = now - start;
+        var progress = Math.min(elapsed / duration, 1);
+        var value = Math.round(easeOut(progress) * target);
+        setter(value);
+        if (progress < 1) requestAnimationFrame(step);
+        else { setter(target); if (onDone) onDone(); }
+      }
+      requestAnimationFrame(step);
+    }
+
+    // --- Referências DOM ---
+    var elInt    = document.getElementById('panel-main-int');
+    var elDec    = document.getElementById('panel-main-dec');
+    var elBots   = document.getElementById('panel-bots');
+    var elBudget = document.getElementById('panel-budget');
+    var elConv   = document.getElementById('panel-conv');
+    var elComp   = document.getElementById('panel-comp');
+    var elBar    = document.getElementById('panel-bar-fill');
+
+    // --- Animação no load ---
+    function startLoadAnimation() {
+      // Barra: 0 → 15.2% em 1.8s
+      if (elBar) {
+        elBar.style.width = '0%';
+        elBar.style.transition = 'width 1.8s cubic-bezier(0.22,1,0.36,1)';
+        setTimeout(function() { elBar.style.width = '15.2%'; }, 100);
+      }
+
+      // Valores estáticos (conv + comp) — contam uma vez, não mudam depois
+      if (elConv) countUp(function(v){ elConv.textContent = v; }, 94, 1400);
+      if (elComp) countUp(function(v){ elComp.textContent = v; }, 18, 1200);
+
+      // Valores dinâmicos — contam e depois incrementam
+      if (elBots) countUp(function(v){
+        state.bots = v;
+        elBots.textContent = v;
+      }, 23, 1300, scheduleIncrements);
+
+      if (elBudget) countUp(function(v){
+        state.budget = v;
+        elBudget.textContent = v;
+      }, 312, 1500);
+
+      // R$ principal: inteiro + centavos
+      if (elInt) countUp(function(v){
+        state.mainInt = v;
+        elInt.textContent = v;
+      }, 487, 1600);
+
+      if (elDec) countUp(function(v){
+        state.mainDec = v;
+        elDec.textContent = v < 10 ? '0' + v : v;
+      }, 20, 1600);
+    }
+
+    // --- Micro-incrementos periódicos ---
+    function scheduleIncrements() {
+      // R$ principal: +R$0,30 a +R$0,80 a cada 58–78s
+      function tickMain() {
+        var addCents = Math.floor(Math.random() * 51) + 30; // 30–80 centavos
+        var total = state.mainInt * 100 + state.mainDec + addCents;
+        state.mainInt = Math.floor(total / 100);
+        state.mainDec = total % 100;
+        if (elInt) elInt.textContent = state.mainInt;
+        if (elDec) elDec.textContent = state.mainDec < 10 ? '0' + state.mainDec : state.mainDec;
+        setTimeout(tickMain, 58000 + Math.random() * 20000);
+      }
+
+      // Bots: +1 a cada 85–115s
+      function tickBots() {
+        state.bots += 1;
+        if (elBots) elBots.textContent = state.bots;
+        setTimeout(tickBots, 85000 + Math.random() * 30000);
+      }
+
+      // Budget: +R$1 a +R$3 a cada 70–100s
+      function tickBudget() {
+        state.budget += Math.floor(Math.random() * 3) + 1;
+        if (elBudget) elBudget.textContent = state.budget;
+        setTimeout(tickBudget, 70000 + Math.random() * 30000);
+      }
+
+      setTimeout(tickMain,   58000 + Math.random() * 20000);
+      setTimeout(tickBots,   85000 + Math.random() * 30000);
+      setTimeout(tickBudget, 70000 + Math.random() * 30000);
+    }
+
+    // --- Dispara quando o painel entrar na viewport ---
+    var panel = document.querySelector('.hero__panel');
+    if (!panel) return;
+
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) {
+          startLoadAnimation();
+          observer.disconnect();
+        }
+      }, { threshold: 0.3 });
+      observer.observe(panel);
+    } else {
+      startLoadAnimation(); // fallback
+    }
+  })();
   </script>
 
   <!-- UTM Parameter Forwarding — repassa parâmetros de origem para links de checkout -->
