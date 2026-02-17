@@ -655,6 +655,55 @@ ul, ol {
   white-space: nowrap;
 }
 
+/* Painel mobile simplificado (hero) */
+.hero__panel-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hero__panel-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background: var(--color-bg-card);
+    border: 1px solid rgba(245, 192, 0, 0.18);
+    border-radius: 10px;
+    padding: 14px 12px;
+    margin-top: 20px;
+    gap: 4px;
+  }
+
+  .hero__panel-mobile__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    flex: 1;
+  }
+
+  .hero__panel-mobile__value {
+    font-family: 'Fira Code', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-accent);
+    line-height: 1;
+  }
+
+  .hero__panel-mobile__label {
+    font-size: 10px;
+    color: var(--color-text-muted);
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .hero__panel-mobile__sep {
+    width: 1px;
+    height: 32px;
+    background: rgba(245, 192, 0, 0.12);
+    flex-shrink: 0;
+  }
+}
+
 /* -----------------------------------------------------------
    [2] AGITACAO DA DOR
    ----------------------------------------------------------- */
@@ -1608,6 +1657,20 @@ ul, ol {
   color: var(--color-text-accent);
 }
 
+.pricing__urgency {
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  text-align: center;
+  max-width: 520px;
+  margin: 0 auto 32px;
+  padding: 12px 16px;
+  border-left: 2px solid var(--color-accent-border);
+  background: rgba(245, 192, 0, 0.04);
+  border-radius: 0 6px 6px 0;
+  letter-spacing: 0.01em;
+}
+
 .pricing-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2247,6 +2310,30 @@ footer {
 
 .fade-in {
   animation: fadeInUp 500ms ease forwards;
+}
+
+/* Reveal on scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+/* Barra de progresso de leitura */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: var(--color-accent);
+  z-index: 9999;
+  pointer-events: none;
+  transition: width 0.1s linear;
 }
 
 /* ================================

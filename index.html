@@ -18,6 +18,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 </head>
 <body>
+  <!-- Barra de progresso de leitura -->
+  <div id="reading-progress" aria-hidden="true" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W9MQ5VQT"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -77,6 +80,24 @@
              class="cta-link">
             Ou calcule quanto está desperdiçando por mês →
           </a>
+        </div>
+
+        <!-- Painel mobile simplificado — visível apenas no mobile -->
+        <div class="hero__panel-mobile" aria-hidden="true">
+          <div class="hero__panel-mobile__item">
+            <span class="hero__panel-mobile__value">R$<span id="panel-main-mobile">487</span></span>
+            <span class="hero__panel-mobile__label">protegidos este mês</span>
+          </div>
+          <span class="hero__panel-mobile__sep"></span>
+          <div class="hero__panel-mobile__item">
+            <span class="hero__panel-mobile__value"><span id="panel-bots-mobile">23</span></span>
+            <span class="hero__panel-mobile__label">bots bloqueados</span>
+          </div>
+          <span class="hero__panel-mobile__sep"></span>
+          <div class="hero__panel-mobile__item">
+            <span class="hero__panel-mobile__value">R$<span id="panel-budget-mobile">312</span></span>
+            <span class="hero__panel-mobile__label">budget recuperado</span>
+          </div>
         </div>
       </div>
 
@@ -878,6 +899,8 @@
         </p>
       </div>
 
+      <p class="pricing__urgency">Cada mês sem tracking = mais um mês de algoritmo aprendendo errado.</p>
+
       <div class="pricing-grid">
 
         <!-- Plano Anual (destaque — aparece primeiro no mobile via CSS order) -->
@@ -1524,6 +1547,10 @@
     var elConv   = document.getElementById('panel-conv');
     var elComp   = document.getElementById('panel-comp');
     var elBar    = document.getElementById('panel-bar-fill');
+    // Mobile panel
+    var elMainM  = document.getElementById('panel-main-mobile');
+    var elBotsM  = document.getElementById('panel-bots-mobile');
+    var elBudgetM= document.getElementById('panel-budget-mobile');
 
     // --- Animação no load ---
     function startLoadAnimation() {
@@ -1542,17 +1569,20 @@
       if (elBots) countUp(function(v){
         state.bots = v;
         elBots.textContent = v;
+        if (elBotsM) elBotsM.textContent = v;
       }, 23, 1300, scheduleIncrements);
 
       if (elBudget) countUp(function(v){
         state.budget = v;
         elBudget.textContent = v;
+        if (elBudgetM) elBudgetM.textContent = v;
       }, 312, 1500);
 
       // R$ principal: inteiro + centavos
       if (elInt) countUp(function(v){
         state.mainInt = v;
         elInt.textContent = v;
+        if (elMainM) elMainM.textContent = v;
       }, 487, 1600);
 
       if (elDec) countUp(function(v){
@@ -1571,6 +1601,7 @@
         state.mainDec = total % 100;
         if (elInt) elInt.textContent = state.mainInt;
         if (elDec) elDec.textContent = state.mainDec < 10 ? '0' + state.mainDec : state.mainDec;
+        if (elMainM) elMainM.textContent = state.mainInt;
         setTimeout(tickMain, 58000 + Math.random() * 20000);
       }
 
@@ -1578,6 +1609,7 @@
       function tickBots() {
         state.bots += 1;
         if (elBots) elBots.textContent = state.bots;
+        if (elBotsM) elBotsM.textContent = state.bots;
         setTimeout(tickBots, 85000 + Math.random() * 30000);
       }
 
@@ -1585,6 +1617,7 @@
       function tickBudget() {
         state.budget += Math.floor(Math.random() * 3) + 1;
         if (elBudget) elBudget.textContent = state.budget;
+        if (elBudgetM) elBudgetM.textContent = state.budget;
         setTimeout(tickBudget, 70000 + Math.random() * 30000);
       }
 
@@ -1671,6 +1704,39 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 </script>
+
+  <!-- Barra de progresso de leitura -->
+  <script>
+  (function() {
+    var bar = document.getElementById('reading-progress');
+    if (!bar) return;
+    window.addEventListener('scroll', function() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      bar.style.width = pct.toFixed(1) + '%';
+      bar.setAttribute('aria-valuenow', Math.round(pct));
+    }, { passive: true });
+  })();
+  </script>
+
+  <!-- Fade-in das seções no scroll -->
+  <script>
+  (function() {
+    if (!('IntersectionObserver' in window)) return;
+    var sections = document.querySelectorAll('section:not(#hero)');
+    sections.forEach(function(el) { el.classList.add('reveal'); });
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    sections.forEach(function(el) { obs.observe(el); });
+  })();
+  </script>
 
 </body>
 </html>
