@@ -87,7 +87,7 @@
             <svg class="hero__panel-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             <div class="hero__panel-title">
               <span class="hero__panel-product">Ratoeira Ads</span>
-              <span class="hero__panel-period">Fevereiro 2026 · Resumo do Mês</span>
+              <span class="hero__panel-period" id="panel-period">Resumo do Mês</span>
             </div>
             <span class="hero__panel-live">● ao vivo</span>
           </div>
@@ -1476,6 +1476,18 @@
           stickyCta.classList.remove('visible');
         });
       });
+    })();
+  </script>
+
+  <!-- Mês dinâmico no painel hero -->
+  <script>
+    (function() {
+      var meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+                   'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+      var now = new Date();
+      var label = meses[now.getMonth()] + ' ' + now.getFullYear() + ' · Resumo do Mês';
+      var el = document.getElementById('panel-period');
+      if (el) el.textContent = label;
     })();
   </script>
 
