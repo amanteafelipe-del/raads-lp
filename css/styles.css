@@ -88,6 +88,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -169,19 +170,20 @@ ul, ol {
   background: var(--color-accent);
   color: #080808;
   font-family: var(--font-main);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: 0.01em;
-  padding: 16px 32px;
-  min-height: 52px;
-  border-radius: var(--radius-full);
+  letter-spacing: 0.02em;
+  padding: 14px 28px;
+  min-height: 48px;
+  border-radius: var(--radius-md);
   border: none;
   box-shadow: var(--shadow-cta);
   cursor: pointer;
   transition: background 200ms ease, box-shadow 200ms ease, transform 100ms ease;
-  text-transform: uppercase;
   text-decoration: none;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.3;
 }
 
 .cta-primary:hover {
@@ -197,9 +199,9 @@ ul, ol {
 
 /* Extra-large (CTA Final) */
 .cta-primary-xl {
-  font-size: 18px;
-  padding: 20px 48px;
-  min-height: 60px;
+  font-size: 16px;
+  padding: 16px 36px;
+  min-height: 52px;
 }
 
 /* Outline */
@@ -209,18 +211,20 @@ ul, ol {
   justify-content: center;
   background: transparent;
   color: var(--color-accent);
-  border: 2px solid var(--color-accent);
+  border: 1.5px solid var(--color-accent-border);
   font-family: var(--font-main);
-  font-size: 15px;
-  font-weight: 700;
-  padding: 14px 28px;
-  min-height: 52px;
-  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 24px;
+  min-height: 44px;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: background 200ms ease;
-  text-transform: uppercase;
+  transition: background 200ms ease, border-color 200ms ease;
   text-decoration: none;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
 }
 
 .cta-outline:hover {
@@ -1822,14 +1826,15 @@ footer {
   left: 0;
   right: 0;
   z-index: 999;
-  background: rgba(8, 8, 8, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid var(--color-border-default);
-  padding: 12px 16px 16px;
+  background: rgba(10, 10, 10, 0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(245, 192, 0, 0.12);
+  padding: 10px 16px 12px;
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
   transform: translateY(100%);
   transition: transform 300ms ease;
 }
@@ -1839,14 +1844,16 @@ footer {
 }
 
 #sticky-cta-mobile .cta-primary {
-  width: 100%;
-  font-size: 15px;
+  flex: 1;
+  font-size: 13px;
+  padding: 11px 16px;
+  min-height: 42px;
+  max-width: none;
+  margin-inline: 0;
 }
 
 #sticky-cta-mobile .guarantee-note {
-  text-align: center;
-  font-size: 12px;
-  color: var(--color-text-muted);
+  display: none;
 }
 
 /* -----------------------------------------------------------
@@ -2003,18 +2010,38 @@ footer {
     display: flex;
   }
 
-  /* CTA buttons full-width mobile */
+  /* CTA buttons mobile */
   .cta-primary, .cta-outline {
     width: 100%;
+    max-width: 380px;
+    margin-inline: auto;
     justify-content: center;
   }
 
   .cta-section {
     width: 100%;
+    align-items: center;
+  }
+
+  /* Tarja mobile compacta */
+  .remarketing-bar__verbose {
+    display: none;
+  }
+
+  #remarketing-bar {
+    min-height: 44px;
+    padding: 6px 44px 6px 12px;
+    gap: 8px;
   }
 
   .remarketing-bar__text {
     font-size: 12px;
+    text-align: left;
+  }
+
+  /* Body padding para sticky CTA não cobrir conteúdo */
+  body {
+    padding-bottom: 76px;
   }
 }
 
