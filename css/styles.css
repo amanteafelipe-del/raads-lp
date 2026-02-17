@@ -14,10 +14,11 @@
 :root {
   /* Cores de fundo */
   --color-bg-page: #080808;
-  --color-bg-section: #0f0f0f;
-  --color-bg-card: #141414;
-  --color-bg-card-hover: #1a1a1a;
-  --color-bg-elevated: #1e1e1e;
+  --color-bg-section: #131313;
+  --color-bg-warm: #0d0c09;
+  --color-bg-card: #181818;
+  --color-bg-card-hover: #1e1e1e;
+  --color-bg-elevated: #202020;
 
   /* Accent amarelo/dourado */
   --color-accent: #F5C000;
@@ -138,6 +139,21 @@ ul, ol {
 
 .section--alt {
   background-color: var(--color-bg-section);
+}
+
+/* Seções de conversão — warm dark + gradiente sutil de marca */
+#pricing,
+#guarantee,
+#cta-final,
+#emotional {
+  background-color: var(--color-bg-warm);
+  background-image: linear-gradient(to bottom, rgba(245, 192, 0, 0.025) 0%, transparent 35%);
+}
+
+/* Separadores visuais entre seções */
+.section + .section,
+.pain-section + .section {
+  border-top: 1px solid var(--color-border-subtle);
 }
 
 .section-title {
@@ -1890,8 +1906,16 @@ footer {
   /* Hero mobile */
   .hero__inner {
     grid-template-columns: 1fr;
-    padding: 80px var(--space-md) 60px;
-    gap: 32px;
+    padding: 28px var(--space-md) 48px;
+    gap: 24px;
+  }
+
+  .hero__logo {
+    margin-bottom: 12px;
+  }
+
+  .hero__logo-img {
+    height: 72px;
   }
 
   .hero__visual {
