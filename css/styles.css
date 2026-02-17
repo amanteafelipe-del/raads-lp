@@ -313,21 +313,6 @@ ul, ol {
   border-color: var(--color-border-default);
 }
 
-/* -----------------------------------------------------------
-   SITE HEADER — Logo
-   ----------------------------------------------------------- */
-.site-header {
-  background: #0d0d0d;
-  padding: 16px 24px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid rgba(245, 192, 0, 0.15);
-}
-
-.site-header img {
-  height: 40px;
-  width: auto;
-}
 
 /* -----------------------------------------------------------
    [0] BARRA DE REMARKETING
@@ -429,15 +414,9 @@ ul, ol {
   margin-bottom: var(--space-xl);
 }
 
-.hero__logo-text {
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--color-accent);
-  letter-spacing: -0.02em;
-}
-
-.hero__logo-text span {
-  color: var(--color-text-heading);
+.hero__logo-img {
+  height: 56px;
+  width: auto;
 }
 
 .hero__headline {
