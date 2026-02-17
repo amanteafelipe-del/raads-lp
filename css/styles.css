@@ -314,6 +314,22 @@ ul, ol {
 }
 
 /* -----------------------------------------------------------
+   SITE HEADER — Logo
+   ----------------------------------------------------------- */
+.site-header {
+  background: #0d0d0d;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(245, 192, 0, 0.15);
+}
+
+.site-header img {
+  height: 40px;
+  width: auto;
+}
+
+/* -----------------------------------------------------------
    [0] BARRA DE REMARKETING
    ----------------------------------------------------------- */
 #remarketing-bar {
