@@ -1915,7 +1915,7 @@ footer {
   }
 
   .hero__logo-img {
-    height: 72px;
+    height: 108px;
   }
 
   .hero__visual {
@@ -2114,8 +2114,15 @@ footer {
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #b91c1c;
+  color: #c84040;
   margin-bottom: 12px;
+}
+
+@media (max-width: 768px) {
+  .pain-section__eyebrow {
+    font-size: 14px;
+    letter-spacing: 0.12em;
+  }
 }
 
 .pain-section__title {
